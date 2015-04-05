@@ -9,7 +9,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import com.codex.wards.blocks.ModBlocks;
+import com.codex.wards.items.ModItems;
 import com.codex.wards.proxy.CommonProxy;
+import com.sun.media.sound.ModelIdentifier;
 
 @Mod(modid = MainHelper.MODID, name = MainHelper.NAME, version = MainHelper.VERSION)
 public class WardsMain {
@@ -24,7 +27,8 @@ public class WardsMain {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-
+		ModBlocks.registerBlocks();
+		ModItems.registerItems();
 	}
 
 	@EventHandler
