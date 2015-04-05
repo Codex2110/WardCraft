@@ -1,8 +1,11 @@
 package com.codex.wards.tiles;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
+import scala.actors.threadpool.Arrays;
+import scala.collection.mutable.LinkedList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -12,6 +15,7 @@ import net.minecraft.world.World;
 
 import com.codex.wards.blocks.wards.MajorWard;
 import com.codex.wards.blocks.wards.RangeMultiplierWard;
+import com.codex.wards.helpers.WardNetHelper;
 import com.codex.wards.particles.LanguageMovingParticle;
 
 public class KeyTileEntity extends TileEntity implements IUpdatePlayerListBox {
@@ -48,17 +52,18 @@ public class KeyTileEntity extends TileEntity implements IUpdatePlayerListBox {
 			corner2 = this.pos.add(-newRange, 0, newRange);
 			corner3 = this.pos.add(-newRange, 0, -newRange);
 			corner4 = this.pos.add(newRange, 0, -newRange);
-			
-			if(allCornersAreWardBlocks()){
-				
-			}
-			
+
 			if(worldObj.isRemote){
 				blocks1 = BlockPos.getAllInBox(corner1, corner2).iterator();
 				blocks2 = BlockPos.getAllInBox(corner2, corner3).iterator();
 				blocks3 = BlockPos.getAllInBox(corner3, corner4).iterator();
 				blocks4 = BlockPos.getAllInBox(corner4, corner1).iterator();
 			}
+
+			if(allCornersAreWardBlocks()){
+				WardNetHelper.decideAction(this);
+			}
+			
 			
 			ticks = 0;
 		}
@@ -88,22 +93,46 @@ public class KeyTileEntity extends TileEntity implements IUpdatePlayerListBox {
 	private boolean allCornersAreWardBlocks(){
 		boolean allCornersAreWardBlocks = true;
 		
-		if(!(worldObj.getBlockState(corner1) instanceof MajorWard)){
+		if(!(worldObj.getBlockState(corner1).getBlock() instanceof MajorWard)){
 			allCornersAreWardBlocks = false;
 		}
-		if(!(worldObj.getBlockState(corner2) instanceof MajorWard)){
+		if(!(worldObj.getBlockState(corner2).getBlock() instanceof MajorWard)){
 			allCornersAreWardBlocks = false;
 		}
-		if(!(worldObj.getBlockState(corner3) instanceof MajorWard)){
+		if(!(worldObj.getBlockState(corner3).getBlock() instanceof MajorWard)){
 			allCornersAreWardBlocks = false;
 		}
-		if(!(worldObj.getBlockState(corner4) instanceof MajorWard)){
+		if(!(worldObj.getBlockState(corner4).getBlock() instanceof MajorWard)){
 			allCornersAreWardBlocks = false;
 		}
-		
 		return allCornersAreWardBlocks;
+	}
+	
+	public List<BlockPos> getCorners(){
+		return Arrays.asList(new BlockPos[]{corner1, corner2, corner3, corner4});
+	}
+	
+	public List<BlockPos> getAllBlocks(){
+		List<BlockPos> pos = new java.util.LinkedList<BlockPos>();
+		Iterator<BlockPos> blockIt1 = BlockPos.getAllInBox(corner1, corner2).iterator();
+		Iterator<BlockPos> blockIt2 = BlockPos.getAllInBox(corner2, corner3).iterator();
+		Iterator<BlockPos> blockIt3 = BlockPos.getAllInBox(corner3, corner4).iterator();
+		Iterator<BlockPos> blockIt4 = BlockPos.getAllInBox(corner4, corner1).iterator();
+
+		while(blockIt1.hasNext()){
+			pos.add(blockIt1.next());
+		}
+		while(blockIt2.hasNext()){
+			pos.add(blockIt2.next());
+		}
+		while(blockIt3.hasNext()){
+			pos.add(blockIt3.next());
+		}
+		while(blockIt4.hasNext()){
+			pos.add(blockIt3.next());
+		}
 		
-		
+		return pos;
 	}
 
 }

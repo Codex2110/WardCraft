@@ -18,6 +18,15 @@ public class ModBlocks {
 		testBlock = new BaseBlock(Material.rock, "testBlock");
 		key = new KeyWard("key", new String[]{"x x","xx ","x x"});
 		power = new RangeMultiplierWard("power", new String[]{"x x"," x ","x x"});
+		earth = new MajorWard("earth", new String[]{"xxx","x x","xxx"});
+		fire = new MajorWard("fire", new String[]{"x x","x x","xxx"});
+		water = new MajorWard("water", new String[]{" x ","x x","xxx"});
+		air = new MajorWard("air", new String[]{" x ","x x"," x "});
+		metal = new MajorWard("metal", new String[]{"xxx","xxx","xxx"});
+		light = new MajorWard("light", new String[]{" x ","xxx"," x "});
+		darkness = new MajorWard("darkness", new String[]{"   ","xxx","   "});
+		growth = new MajorWard("growth", new String[]{" x "," x ","xxx"});
+		decay = new MajorWard("decay", new String[]{"   ","   ","xxx"});
 	}
 
 }
