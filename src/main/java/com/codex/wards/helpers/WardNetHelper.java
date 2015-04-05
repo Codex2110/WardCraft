@@ -7,6 +7,8 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -27,8 +29,21 @@ public class WardNetHelper {
 					unlocalizedName.length()));
 		}
 
-		if (listContains(cornerBlocks, "earth", "water", "light", "growth")) {
-			actionGrowth(tile, cornerPos.get(0), cornerPos.get(2));
+		if (listContains(cornerBlocks, new String[] { "earth", "water",
+				"light", "growth" })) {
+				actionGrowth(tile, cornerPos.get(0), cornerPos.get(2));
+		} else if (listContains(cornerBlocks, new String[] { "power", "decay",
+				"transfer" })) {
+			if (cornerBlocks.contains("plant")) {
+				WardPowerGenerationHelper.actionPlantPower(tile,
+						cornerPos.get(0), cornerPos.get(2));
+			} else if (cornerBlocks.contains("mob")) {
+				WardPowerGenerationHelper.actionMobPower(tile);
+			} else if (cornerBlocks.contains("animal")) {
+				WardPowerGenerationHelper.actionAnimalPower(tile);
+			} else if (cornerBlocks.contains("player")) {
+				WardPowerGenerationHelper.actionPlayerPower(tile);
+			}
 		}
 
 	}
@@ -42,7 +57,7 @@ public class WardNetHelper {
 			BlockPos currentBlockPos = blockPos.next();
 			Block block = tile.getWorld().getBlockState(currentBlockPos)
 					.getBlock();
-			if (block instanceof IGrowable) {
+			if (block instanceof IGrowable && tile.decreasePower(3)) {
 				tile.getWorld().updateBlockTick(currentBlockPos, block, 1, 1);
 				if (tile.getWorld().isRemote) {
 					if (random.nextFloat() > 0.9f) {
@@ -59,10 +74,16 @@ public class WardNetHelper {
 	}
 
 	private static boolean listContains(List<String> cornerBlocks,
-			String string, String string2, String string3, String string4) {
-		return cornerBlocks.contains(string) && cornerBlocks.contains(string2)
-				&& cornerBlocks.contains(string3)
-				&& cornerBlocks.contains(string4);
+			String[] wards) {
+		boolean containsParams = true;
+
+		for (int i = 0; i < wards.length; i++) {
+			if (!cornerBlocks.contains(wards[i])) {
+				containsParams = false;
+			}
+		}
+
+		return containsParams;
 	}
 
 }
