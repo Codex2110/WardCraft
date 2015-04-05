@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import com.codex.wards.blocks.ModBlocks;
 import com.codex.wards.items.ModItems;
 import com.codex.wards.proxy.CommonProxy;
-import com.sun.media.sound.ModelIdentifier;
 
 @Mod(modid = MainHelper.MODID, name = MainHelper.NAME, version = MainHelper.VERSION)
 public class WardsMain {

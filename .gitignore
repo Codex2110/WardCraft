@@ -4,6 +4,7 @@
 /saves/
 /.metadata/
 /.gradle/
+/crash-reports/
 .classpath
 .project
 *.prefs

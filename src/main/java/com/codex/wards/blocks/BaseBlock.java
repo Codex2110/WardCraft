@@ -1,5 +1,6 @@
 package com.codex.wards.blocks;
 
+import com.codex.wards.MainHelper;
 import com.codex.wards.WardsMain;
 import com.sun.xml.internal.ws.assembler.dev.ServerTubelineAssemblyContext;
 
@@ -24,7 +25,7 @@ public class BaseBlock extends Block {
 	}
 	
 	public void setupBlock(String name){
-		setUnlocalizedName(name);
+		setUnlocalizedName(MainHelper.MODID +"_"+name);
 		setCreativeTab(WardsMain.mainTab);
 		GameRegistry.registerBlock(this, name);
 		registerRecipe();
